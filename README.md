@@ -58,6 +58,30 @@ console.log(layout.getValues())
 ```
 
 
+### dynamic constraints
+
+You don't need to declare all of the constraints up front. It's possible to dynamically add/remove constraints from the 
+solver at any time:
+
+```javascript
+const layout = constraints({
+	editableVariables: [ ],
+	constraints: 'y = 34'
+})
+
+// .. later on
+
+layout.addConstraint('x = y + 45')
+layout.addConstraint('z = x * 14.5')
+layout.removeConstraint('y = 34')
+
+layout.updateVariables()
+
+console.log(layout.getValues())
+
+```
+
+
 ### how it works
 
 ```
@@ -68,7 +92,3 @@ console.log(layout.getValues())
                                              (accepts tokens as input)
 
 ```
-
-### TODO
-
-* add validation when converting from IR -> kiwi.js
