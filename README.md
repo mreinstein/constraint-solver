@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/mreinstein/constraint-solver.svg?branch=master)](https://travis-ci.org/mreinstein/constraint-solver)
 
-a constraint solver based on kiwi.js (cassowary)
+a cassowary constraint solver. wraps [kiwi.js](https://www.npmjs.com/package/kiwi.js) with better ergonomics.
 
-a wrapper of kiwi.js with better ergonomics. Declares a mini language to declare constraints in text rather than code.
+Declares a mini language to declare constraints in text rather than code.
 
 ## example
 
