@@ -66,14 +66,16 @@ solver at any time:
 ```javascript
 const layout = constraints({
 	editableVariables: [ ],
-	constraints: 'y = 34'
+	constraints: 'y == 34'
 })
 
 // .. later on
 
-layout.addConstraint('x = y + 45')
-layout.addConstraint('z = x * 14.5')
-layout.removeConstraint('y = 34')
+layout.addConstraint('x == y + 45')
+layout.addConstraint('z == x * 14.5')
+
+// NOTE: this must match the same exact string used when the constraint was added
+layout.removeConstraint('y == 34')
 
 layout.updateVariables()
 
