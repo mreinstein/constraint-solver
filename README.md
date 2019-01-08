@@ -46,7 +46,8 @@ layout.updateVariables()
 console.log(layout.getValues())
 
 /*
-{ windowWidth: 1024, windowHeight: 768, modalWidth: 972, modalHeight: 729, modalLeft: 25, modalTop: 19
+{
+  windowWidth: 1024, windowHeight: 768, modalWidth: 972, modalHeight: 729, modalLeft: 25, modalTop: 19
   modalWidth: 972, playlistHeight: 729, playlistLeft: 667, playlistTop: 19, playlistWidth: 324
   videoContainerHeight: 729, videoContainerTop: 19, videoContainerWidth: 642
 }
@@ -57,9 +58,14 @@ console.log(layout.getValues())
 ### how it works
 
 ```
-(input constraints raw text) --> lexer -- (tokens) --> intermediate representation (ir) compiler -- (ir object) --> ir to kiwi compiler --> (javascript object)
+┌-----------------┐                       ┌----------------------------┐        ┌-----------┐
+|input constraints|        ┌-----┐        |intermediate representation |        |ir to kiwi |
+|(raw text)       | -----> |Lexer| -----> |(ir) compiler               | -----> |compiler   |
+└-----------------┘        └-----┘        └----------------------------┘        └-----------┘
+                                             (accepts tokens as input)
+
 ```
 
 ### TODO
 
-* add validation when converting from IR -> kiwi
+* add validation when converting from IR -> kiwi.js
