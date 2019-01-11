@@ -455,7 +455,7 @@ function constraints (options={}) {
 			const ir = tokensToIrConstraint(tokens);
 			const constraint = irConstraintToKiwi(identifiers, ir);
 			if (constraint) {
-				constraintMap[constraintString] = constraint;
+				constraintMap[constraintString.trim()] = constraint;
 				solver.addConstraint(constraint);
 			}
 		}
@@ -471,7 +471,7 @@ function constraints (options={}) {
 
 
 	const removeConstraint = function (constraintString) {
-		if (constraintMap[constraintString]) {
+		if (constraintMap[constraintString.trim()]) {
 			solver.removeConstraint(constraintMap[constraintString]);
 			delete constraintMap[constraintString];
 		}
