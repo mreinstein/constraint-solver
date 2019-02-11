@@ -1,5 +1,5 @@
-import tap   from 'tap'
-import ttcir from '../lib/tokens-to-constraint-ir.js'
+import tap      from 'tap'
+import ttcir    from '../lib/tokens-to-constraint-ir.js'
 import tokenize from './helpers/tokenize.js'
 
 

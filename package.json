@@ -10,7 +10,7 @@
     "build:cjs": "rollup lib/constraints.js -c rollup.config.js --file dist/constraint-solver.cjs.js --format cjs",
     "build:esm": "rollup lib/constraints.js -c rollup.config.js --file dist/constraint-solver.esm.js --format esm",
     "prepublishOnly": "npm run build",
-    "test": "tap test/index.js"
+    "test": "tap --node-arg='--require=esm' test/index.js"
   },
   "repository": {
     "type": "git",
