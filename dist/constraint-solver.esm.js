@@ -184,7 +184,8 @@ Lexer.prototype._process_comment = function() {
 Lexer.prototype._process_identifier = function() {
   var endpos = this.pos + 1;
   while (endpos < this.buflen &&
-         Lexer._isalphanum(this.buf.charAt(endpos))) {
+         (Lexer._isalphanum(this.buf.charAt(endpos)) || this.buf.charAt(endpos) === '.')
+        ) {
     endpos++;
   }
 
