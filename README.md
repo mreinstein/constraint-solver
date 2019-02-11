@@ -15,34 +15,34 @@ import constraints from 'constraint-solver'
 const layout = constraints({
 	editableVariables: [
 		{
-			name: 'windowWidth', 
+			name: 'window.width', 
 			strength: 'strong'
 		},
 		{
-			name: 'windowHeight', 
+			name: 'window.height', 
 			strength: 'strong'
 		}
 	],
 	constraints: `
-		modalWidth  <= windowWidth * 0.95   required
-		modalHeight <= windowHeight * 0.95  required
+		modal.width  <= window.width * 0.95   required
+		modal.height <= window.height * 0.95  required
 		
-		modalLeft   == (windowWidth - modalWidth) / 2   required
-		modalTop    == (windowHeight - modalHeight) / 2 required
+		modal.left   == (window.width - modal.width) / 2   required
+		modal.top    == (window.height - modal.height) / 2 required
 
-		playlistWidth  == modalWidth / 3
-		playlistHeight <= videoContainerHeight  required
-		playlistTop    == modalTop              required
-		playlistLeft   == modalLeft + videoContainerWidth
+		playlist.width  == modal.width / 3
+		playlist.height <= videoContainer.height  required
+		playlist.top    == modal.top              required
+		playlist.left   == modal.left + videoContainer.width
 
-		videoContainerWidth  == modalWidth * 0.66
-		videoContainerHeight == modalHeight
-		videoContainerTop    == modalTop            required
+		videoContainer.width  == modal.width * 0.66
+		videoContainer.height == modal.height
+		videoContainer.top    == modal.top            required
 	`
 })
 
-layout.suggestValue('windowWidth', 1024)
-layout.suggestValue('windowHeight', 768)
+layout.suggestValue('window.width', 1024)
+layout.suggestValue('window.height', 768)
 
 layout.updateVariables()
 
@@ -50,9 +50,9 @@ console.log(layout.getValues())
 
 /*
 {
-  windowWidth: 1024, windowHeight: 768, modalWidth: 972, modalHeight: 729, modalLeft: 25, modalTop: 19
-  modalWidth: 972, playlistHeight: 729, playlistLeft: 667, playlistTop: 19, playlistWidth: 324
-  videoContainerHeight: 729, videoContainerTop: 19, videoContainerWidth: 642
+  window.width: 1024, window.height: 768, modal.width: 972, modal.height: 729, modal.left: 25, modal.top: 19
+  modal.width: 972, playlist.height: 729, playlist.left: 667, playlist.top: 19, playlist.width: 324
+  videoContainer.height: 729, videoContainer.top: 19, videoContainer.width: 642
 }
 */
 ```
