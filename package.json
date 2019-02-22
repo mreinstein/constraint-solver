@@ -1,7 +1,6 @@
 {
   "name": "constraint-solver",
-  "version": "0.2.0",
-  "private": true,
+  "version": "1.0.0",
   "description": "a constraint solver based on kiwi.js (cassowary)",
   "main": "dist/constraint-solver.cjs.js",
   "module": "dist/constraint-solver.esm.js",
