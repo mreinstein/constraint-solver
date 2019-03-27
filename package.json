@@ -25,8 +25,11 @@
     "kiwi.js": "^1.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "npm-run-all": "^4.1.5",
     "rollup": "^1.2.2",
+    "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-node-resolve": "^4.0.1",
     "tap": "^12.5.3"
   },

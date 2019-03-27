@@ -3,53 +3,49 @@
 var kiwi = require('kiwi.js');
 
 // modified from https://eli.thegreenplace.net/2013/07/16/hand-written-lexer-in-javascript-compared-to-the-regex-based-ones
-
-const Lexer = function() {
+var Lexer = function Lexer() {
   this.pos = 0;
   this.buf = null;
-  this.buflen = 0;
+  this.buflen = 0; // Operator table, mapping operator -> token name
 
-  // Operator table, mapping operator -> token name
   this.optable = {
     '==': 'EQUALS',
-    '<=':  'LEQUAL',
-    '>=':  'GEQUAL',
-    '+':  'PLUS',
-    '-':  'MINUS',
-    '*':  'MULTIPLY',
-    '.':  'PERIOD',
+    '<=': 'LEQUAL',
+    '>=': 'GEQUAL',
+    '+': 'PLUS',
+    '-': 'MINUS',
+    '*': 'MULTIPLY',
+    '.': 'PERIOD',
     '\\': 'BACKSLASH',
-    ':':  'COLON',
-    '%':  'PERCENT',
-    '|':  'PIPE',
-    '!':  'EXCLAMATION',
-    '?':  'QUESTION',
-    '#':  'POUND',
-    '&':  'AMPERSAND',
-    ';':  'SEMI',
-    ',':  'COMMA',
-    '(':  'L_PAREN',
-    ')':  'R_PAREN',
-    '<':  'L_ANG',
-    '>':  'R_ANG',
-    '{':  'L_BRACE',
-    '}':  'R_BRACE',
-    '[':  'L_BRACKET',
-    ']':  'R_BRACKET',
-    '=':  'ASSIGNMENT'
+    ':': 'COLON',
+    '%': 'PERCENT',
+    '|': 'PIPE',
+    '!': 'EXCLAMATION',
+    '?': 'QUESTION',
+    '#': 'POUND',
+    '&': 'AMPERSAND',
+    ';': 'SEMI',
+    ',': 'COMMA',
+    '(': 'L_PAREN',
+    ')': 'R_PAREN',
+    '<': 'L_ANG',
+    '>': 'R_ANG',
+    '{': 'L_BRACE',
+    '}': 'R_BRACE',
+    '[': 'L_BRACKET',
+    ']': 'R_BRACKET',
+    '=': 'ASSIGNMENT'
   };
-};
-
-// Initialize the Lexer's buffer. This resets the lexer's internal
+}; // Initialize the Lexer's buffer. This resets the lexer's internal
 // state and subsequent tokens will be returned starting with the
 // beginning of the new buffer.
-Lexer.prototype.input = function(buf) {
+
+
+Lexer.prototype.input = function (buf) {
   this.pos = 0;
   this.buf = buf;
   this.buflen = buf.length;
-};
-
-// Get the next token from the current buffer. A token is an object with
+}; // Get the next token from the current buffer. A token is an object with
 // the following properties:
 // - name: name of the pattern that this token matched (taken from rules).
 // - value: actual string value of the token.
@@ -57,54 +53,93 @@ Lexer.prototype.input = function(buf) {
 //
 // If there are no more tokens in the buffer, returns null. In case of
 // an error throws Error.
-Lexer.prototype.token = function() {
+
+
+Lexer.prototype.token = function () {
   this._skipnontokens();
+
   if (this.pos >= this.buflen) {
     return null;
-  }
+  } // The char at this.pos is part of a real token. Figure out which.
 
-  // The char at this.pos is part of a real token. Figure out which.
-  const c = this.buf.charAt(this.pos);
 
-  // '/' is treated specially, because it starts a comment if followed by
+  var c = this.buf.charAt(this.pos); // '/' is treated specially, because it starts a comment if followed by
   // another '/'. If not followed by another '/', it's the DIVIDE
   // operator.
+
   if (c === '/') {
-    const next_c = this.buf.charAt(this.pos + 1);
+    var next_c = this.buf.charAt(this.pos + 1);
+
     if (next_c === '/') {
       return this._process_comment();
     } else {
-      return {name: 'DIVIDE', value: '/', pos: this.pos++};
+      return {
+        name: 'DIVIDE',
+        value: '/',
+        pos: this.pos++
+      };
     }
   } else if (c === '<') {
-    const next_c = this.buf.charAt(this.pos + 1);
-    if (next_c === '=') {
+    var _next_c = this.buf.charAt(this.pos + 1);
+
+    if (_next_c === '=') {
       this.pos += 2;
-      return {name: 'LEQUAL', value: '<=', pos: this.pos - 2 };
+      return {
+        name: 'LEQUAL',
+        value: '<=',
+        pos: this.pos - 2
+      };
     } else {
-      return {name: 'L_ANG', value: '<', pos: this.pos++};
+      return {
+        name: 'L_ANG',
+        value: '<',
+        pos: this.pos++
+      };
     }
   } else if (c === '>') {
-    const next_c = this.buf.charAt(this.pos + 1);
-    if (next_c === '=') {
+    var _next_c2 = this.buf.charAt(this.pos + 1);
+
+    if (_next_c2 === '=') {
       this.pos += 2;
-      return {name: 'GEQUAL', value: '>=', pos: this.pos - 2 };
+      return {
+        name: 'GEQUAL',
+        value: '>=',
+        pos: this.pos - 2
+      };
     } else {
-      return {name: 'R_ANG', value: '>', pos: this.pos++};
+      return {
+        name: 'R_ANG',
+        value: '>',
+        pos: this.pos++
+      };
     }
   } else if (c === '=') {
-    const next_c = this.buf.charAt(this.pos + 1);
-    if (next_c === '=') {
+    var _next_c3 = this.buf.charAt(this.pos + 1);
+
+    if (_next_c3 === '=') {
       this.pos += 2;
-      return {name: 'EQUALS', value: '==', pos: this.pos - 2 };
+      return {
+        name: 'EQUALS',
+        value: '==',
+        pos: this.pos - 2
+      };
     } else {
-      return {name: 'ASSIGNMENT', value: '>', pos: this.pos++};
+      return {
+        name: 'ASSIGNMENT',
+        value: '>',
+        pos: this.pos++
+      };
     }
   } else {
     // Look it up in the table of operators
-    const op = this.optable[c];
+    var op = this.optable[c];
+
     if (op !== undefined) {
-      return {name: op, value: c, pos: this.pos++};
+      return {
+        name: op,
+        value: c,
+        pos: this.pos++
+      };
     } else {
       // Not an operator - so it's the beginning of another token.
       if (Lexer._isalpha(c)) {
@@ -120,39 +155,31 @@ Lexer.prototype.token = function() {
   }
 };
 
-Lexer._isnewline = function(c) {
+Lexer._isnewline = function (c) {
   return c === '\r' || c === '\n';
 };
 
-Lexer._isdigit = function(c) {
+Lexer._isdigit = function (c) {
   return c >= '0' && c <= '9';
 };
 
-Lexer._isalpha = function(c) {
-  return (c >= 'a' && c <= 'z') ||
-         (c >= 'A' && c <= 'Z') ||
-         c === '_' || c === '$';
+Lexer._isalpha = function (c) {
+  return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$';
 };
 
-Lexer._isalphanum = function(c) {
-  return (c >= 'a' && c <= 'z') ||
-         (c >= 'A' && c <= 'Z') ||
-         (c >= '0' && c <= '9') ||
-         c === '_' || c === '$';
+Lexer._isalphanum = function (c) {
+  return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c === '_' || c === '$';
 };
 
-
-Lexer.prototype._process_number = function() {
+Lexer.prototype._process_number = function () {
   var endpos = this.pos + 1;
-
   var encounteredDecimalPoint = false;
 
-  while (endpos < this.buflen &&
-         ( Lexer._isdigit(this.buf.charAt(endpos)) || (!encounteredDecimalPoint && this.buf.charAt(endpos) === '.'))
-  ) {
+  while (endpos < this.buflen && (Lexer._isdigit(this.buf.charAt(endpos)) || !encounteredDecimalPoint && this.buf.charAt(endpos) === '.')) {
     if (this.buf.charAt(endpos) === '.') {
       encounteredDecimalPoint = true;
     }
+
     endpos++;
   }
 
@@ -165,12 +192,12 @@ Lexer.prototype._process_number = function() {
   return tok;
 };
 
-Lexer.prototype._process_comment = function() {
-  var endpos = this.pos + 2;
-  // Skip until the end of the line
+Lexer.prototype._process_comment = function () {
+  var endpos = this.pos + 2; // Skip until the end of the line
+
   var c = this.buf.charAt(this.pos + 2);
-  while (endpos < this.buflen &&
-         !Lexer._isnewline(this.buf.charAt(endpos))) {
+
+  while (endpos < this.buflen && !Lexer._isnewline(this.buf.charAt(endpos))) {
     endpos++;
   }
 
@@ -183,11 +210,10 @@ Lexer.prototype._process_comment = function() {
   return tok;
 };
 
-Lexer.prototype._process_identifier = function() {
+Lexer.prototype._process_identifier = function () {
   var endpos = this.pos + 1;
-  while (endpos < this.buflen &&
-         (Lexer._isalphanum(this.buf.charAt(endpos)) || this.buf.charAt(endpos) === '.')
-        ) {
+
+  while (endpos < this.buflen && (Lexer._isalphanum(this.buf.charAt(endpos)) || this.buf.charAt(endpos) === '.')) {
     endpos++;
   }
 
@@ -200,7 +226,7 @@ Lexer.prototype._process_identifier = function() {
   return tok;
 };
 
-Lexer.prototype._process_quote = function() {
+Lexer.prototype._process_quote = function () {
   // this.pos points at the opening quote. Find the ending quote.
   var end_index = this.buf.indexOf('"', this.pos + 1);
 
@@ -217,9 +243,10 @@ Lexer.prototype._process_quote = function() {
   }
 };
 
-Lexer.prototype._skipnontokens = function() {
+Lexer.prototype._skipnontokens = function () {
   while (this.pos < this.buflen) {
     var c = this.buf.charAt(this.pos);
+
     if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
       this.pos++;
     } else {
@@ -228,285 +255,254 @@ Lexer.prototype._skipnontokens = function() {
   }
 };
 
-function strengthLookup (str) {
-	const mappings = {
-		required: kiwi.Strength.required,
-		strong: kiwi.Strength.strong,
-		medium: kiwi.Strength.medium,
-		weak: kiwi.Strength.weak
-	};
-	return mappings[str]
+function strengthLookup(str) {
+  var mappings = {
+    required: kiwi.Strength.required,
+    strong: kiwi.Strength.strong,
+    medium: kiwi.Strength.medium,
+    weak: kiwi.Strength.weak
+  };
+  return mappings[str];
 }
 
-function operatorLookup (str) {
-	if (str === '>=')
-		return kiwi.Operator.Ge
-	if (str === '<=')
-		return kiwi.Operator.Le
-	if (str === '==')
-		return kiwi.Operator.Eq
-
-	throw new Error('unknown lookup:', str)
+function operatorLookup(str) {
+  if (str === '>=') return kiwi.Operator.Ge;
+  if (str === '<=') return kiwi.Operator.Le;
+  if (str === '==') return kiwi.Operator.Eq;
+  throw new Error('unknown lookup:', str);
 }
 
+function applyOperator(lhs, op, rhs) {
+  if (op === 'DIVIDE') {
+    if (typeof rhs !== 'number') throw new Error('right hand side of expression must be number when dividing.');
+    return lhs.divide(rhs); // subExpression must be a number in this case
+  } else if (op === 'MULTIPLY') {
+    if (typeof rhs !== 'number') throw new Error('right hand side of expression must be number when multiplying.');
+    return lhs.multiply(rhs); // subExpression must be a number in this case
+  } else if (op === 'PLUS') {
+    return lhs.plus(rhs);
+  } else if (op === 'MINUS') {
+    return lhs.minus(rhs);
+  }
+} // create a kiwi expression from an intermediate representation
 
-function applyOperator (lhs, op, rhs) {
-	if (op === 'DIVIDE') {
-		if (typeof rhs !== 'number')
-			throw new Error('right hand side of expression must be number when dividing.')
-		return lhs.divide(rhs) // subExpression must be a number in this case
-	}
-	else if (op === 'MULTIPLY') {
-		if (typeof rhs !== 'number')
-			throw new Error('right hand side of expression must be number when multiplying.')
-		return lhs.multiply(rhs)  // subExpression must be a number in this case
-	}
-	else if (op === 'PLUS') {
-		return lhs.plus(rhs)
-	}
-	else if (op === 'MINUS') {
-		return lhs.minus(rhs)
-	}
+
+function irExpressionToKiwi(identifiers, irExpression) {
+  if (irExpression.type === 'IDENTIFIER') {
+    if (!identifiers[irExpression.value]) identifiers[irExpression.value] = new kiwi.Variable(irExpression.value);
+    return identifiers[irExpression.value];
+  }
+
+  if (irExpression.type === 'NUMBER') return irExpression.value;
+  var expression, operator;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = irExpression.arguments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var argument = _step.value;
+      var type = argument.type,
+          value = argument.value;
+
+      if (argument.type === 'IDENTIFIER') {
+        if (!identifiers[value]) identifiers[value] = new kiwi.Variable(value);
+        var variable = identifiers[value];
+
+        if (expression) {
+          if (!operator) throw new Error('encountered identifier without operator');
+          expression = applyOperator(expression, operator, variable);
+          operator = undefined;
+        } else {
+          expression = new kiwi.Expression(variable);
+        }
+      } else if (argument.type === 'EXPRESSION') {
+        if (!expression) {
+          expression = irExpressionToKiwi(identifiers, argument);
+        } else {
+          if (operator) {
+            expression = applyOperator(expression, operator, argument);
+            operator = undefined;
+          } else {
+            throw new Error('encountered 2 expressions without an operator');
+          }
+        }
+      } else if (argument.type === 'OPERATOR') {
+        operator = argument.value;
+      } else if (argument.type === 'NUMBER') {
+        if (expression) {
+          if (operator) {
+            expression = applyOperator(expression, operator, argument.value);
+            operator = undefined;
+          } else {
+            throw new Error('encountered number without operator');
+          }
+        } else {
+          expression = new kiwi.Expression(argument.value);
+        }
+
+        if (operator) {
+          expression = applyOperator(expression, operator, argument.value);
+          operator = undefined;
+        }
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return expression;
+} // create a kiwi constraint from an intermediate representation
+
+
+function irConstraintToKiwi(identifiers, irConstraint) {
+  if (irConstraint.type !== 'CONSTRAINT') return;
+  return new kiwi.Constraint(irExpressionToKiwi(identifiers, irConstraint.lhs), operatorLookup(irConstraint.operator.value), irExpressionToKiwi(identifiers, irConstraint.rhs), strengthLookup(irConstraint.strength));
 }
 
-
-// create a kiwi expression from an intermediate representation
-function irExpressionToKiwi (identifiers, irExpression) {
-	if (irExpression.type === 'IDENTIFIER') {
-		if (!identifiers[irExpression.value])
-			identifiers[irExpression.value] = new kiwi.Variable(irExpression.value);
-		return identifiers[irExpression.value]
-	}
-
-	if (irExpression.type === 'NUMBER')
-		return irExpression.value
-
-	let expression, operator;
-
-	for (const argument of irExpression.arguments) {
-		const { type, value } = argument;
-
-		if (argument.type === 'IDENTIFIER') {
-			if (!identifiers[value])
-				identifiers[value] = new kiwi.Variable(value);
-			const variable = identifiers[value];
-			if (expression) {
-				if (!operator)
-					throw new Error('encountered identifier without operator')
-				expression = applyOperator(expression, operator, variable); 
-				operator = undefined;
-			}
-			else {
-				expression = new kiwi.Expression(variable);
-			}
-		}
-		else if (argument.type === 'EXPRESSION') {
-			if (!expression) {
-				expression = irExpressionToKiwi(identifiers, argument);
-			} else {
-				if (operator) {
-					expression = applyOperator(expression, operator, argument);
- 					operator = undefined;
-				} else {
-					throw new Error ('encountered 2 expressions without an operator')
-				}
-			}
-		}
-
-		else if (argument.type === 'OPERATOR') {
-			operator = argument.value;
-		}
-
-		else if (argument.type === 'NUMBER') {
-			if (expression) {
-				if (operator) {
-					expression = applyOperator(expression, operator, argument.value); 
-					operator = undefined;
-				}
-				else {
-					throw new Error('encountered number without operator')
-				}
-			} else {
-				expression = new kiwi.Expression(argument.value);
-			}
-
-			if (operator) {
-				expression = applyOperator(expression, operator, argument.value);
-				operator = undefined;
-			}
-		}
-	}
-
-	return expression
+function isReservedIdentifier(identifier) {
+  return ['required', 'strong', 'medium', 'weak'].indexOf(identifier) >= 0;
 }
 
+function tokensToIrExpression(tokens) {
+  var token;
+  var result = {
+    type: 'EXPRESSION',
+    arguments: []
+  };
+
+  while (token = tokens[0]) {
+    if (['LEQUAL', 'GEQUAL', 'EQUALS'].indexOf(token.name) >= 0) break; // equality operators are not part of expressions
+
+    if (token.name === 'IDENTIFIER' && isReservedIdentifier(token.value)) break; // constraint strengths are not part of expressions
+
+    tokens.shift();
+    if (token.name === 'R_PAREN') break; // encountered end of expression
+
+    if (token.name === 'L_PAREN') result.arguments.push(tokensToIrExpression(tokens));else if (token.name === 'IDENTIFIER' && !isReservedIdentifier(token.value)) result.arguments.push({
+      type: 'IDENTIFIER',
+      value: token.value
+    });else if (['DIVIDE', 'PLUS', 'MINUS', 'MULTIPLY'].indexOf(token.name) >= 0) result.arguments.push({
+      type: 'OPERATOR',
+      value: token.name
+    });else if (token.name === 'FLOAT') result.arguments.push({
+      type: 'NUMBER',
+      value: parseFloat(token.value)
+    });else if (token.name === 'INTEGER') result.arguments.push({
+      type: 'NUMBER',
+      value: parseInt(token.value, 10)
+    });else if (token.name === 'COMMENT') result.arguments.push({
+      type: 'COMMENT',
+      value: token.value
+    });else throw new Error('unexpected token. name:' + token.name + ' value:' + token.value);
+  } // expressions only make sense when we have more than 1 argument. we can reduce this to a simpler result
+  // e.g., (45) is an expression that can be reduced to 45 (return a NUMBER rather than an expression of [ NUMBER ])
 
 
-// create a kiwi constraint from an intermediate representation
-function irConstraintToKiwi (identifiers, irConstraint) {
-	if (irConstraint.type !== 'CONSTRAINT')
-		return
-
-	return new kiwi.Constraint(
-		irExpressionToKiwi(identifiers, irConstraint.lhs),
-		operatorLookup(irConstraint.operator.value),
-		irExpressionToKiwi(identifiers, irConstraint.rhs),
-		strengthLookup(irConstraint.strength)
-	)
+  if (result.arguments.length === 1) return result.arguments[0];
+  return result;
 }
 
-function isReservedIdentifier (identifier) {
-	return [ 'required', 'strong', 'medium', 'weak' ].indexOf(identifier) >= 0
+function tokensToIrConstraint(tokens) {
+  var constraint = {
+    type: 'CONSTRAINT',
+    strength: 'strong'
+  };
+  constraint.lhs = tokensToIrExpression(tokens);
+  constraint.operator = tokens.shift(); // e.g., a comment on a line by itself wont have an operator
+
+  if (!constraint.operator) return constraint.lhs;
+  constraint.rhs = tokensToIrExpression(tokens);
+  var nextToken = tokens.shift();
+  if (nextToken && nextToken.name === 'IDENTIFIER' && isReservedIdentifier(nextToken.value)) constraint.strength = nextToken.value;
+  return constraint;
 }
 
-// parse an expression from tokens into an intermediate representation (ir.)
-function tokensToIrExpression (tokens) {
-	let token;
+function constraints() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var editableVariables = options.editableVariables;
+  var constraintString = options.constraints || '';
+  var l = new Lexer();
 
-	const result = {
-		type: 'EXPRESSION',
-		arguments: [ ]
-	};
+  var addConstraint = function addConstraint(constraintString) {
+    l.input(constraintString);
+    var tokens = [];
+    var nextToken;
 
-	while (token = tokens[0]) {
-		if ([ 'LEQUAL', 'GEQUAL', 'EQUALS' ].indexOf(token.name) >= 0)
-			break  // equality operators are not part of expressions
-
-		if (token.name === 'IDENTIFIER' && isReservedIdentifier(token.value))
-			break  // constraint strengths are not part of expressions
-
-		tokens.shift();
-
-		if (token.name === 'R_PAREN')
-			break  // encountered end of expression
-
-		if (token.name === 'L_PAREN')
-			result.arguments.push(tokensToIrExpression(tokens));
-
-		else if (token.name === 'IDENTIFIER' && !isReservedIdentifier(token.value))
-			result.arguments.push({ type: 'IDENTIFIER', value: token.value });
-
-		else if ([ 'DIVIDE', 'PLUS', 'MINUS', 'MULTIPLY' ].indexOf(token.name) >= 0)
-			result.arguments.push({ type: 'OPERATOR', value: token.name });
-
-		else if (token.name === 'FLOAT')
-			result.arguments.push({ type: 'NUMBER', value: parseFloat(token.value) });
-
-		else if (token.name === 'INTEGER')
-			result.arguments.push({ type: 'NUMBER', value: parseInt(token.value, 10) });
-
-		else if (token.name === 'COMMENT')
-			result.arguments.push({ type: 'COMMENT', value: token.value });
-
-		else
-			throw new Error('unexpected token. name:' + token.name + ' value:' + token.value)
-	}
-
-	// expressions only make sense when we have more than 1 argument. we can reduce this to a simpler result
-	// e.g., (45) is an expression that can be reduced to 45 (return a NUMBER rather than an expression of [ NUMBER ])
-	if (result.arguments.length === 1)
-		return result.arguments[0]
-
-	return result
-}
-
-// parse a constraint from tokens into an intermediate representation (ir.)
-function tokensToIrConstraint (tokens) {
-	const constraint = {
-		type: 'CONSTRAINT',
-		strength: 'strong'
-	};
-
-	constraint.lhs = tokensToIrExpression(tokens);
-	constraint.operator = tokens.shift();
-
-	// e.g., a comment on a line by itself wont have an operator
-	if (!constraint.operator)
-		return constraint.lhs
-
-	constraint.rhs = tokensToIrExpression(tokens);
-	
-	const nextToken = tokens.shift();
-
-	if (nextToken && nextToken.name === 'IDENTIFIER' && isReservedIdentifier(nextToken.value))
-		constraint.strength = nextToken.value;
-
-	return constraint
-}
-
-function constraints (options={}) {
-	const { editableVariables } = options;
-	const constraintString = options.constraints || '';
-
-	const l = new Lexer();
+    while (nextToken = l.token()) {
+      tokens.push(nextToken);
+    } //console.log('tokens:', JSON.stringify(tokens))
 
 
-	const addConstraint = function (constraintString) {
-		l.input(constraintString);
+    if (tokens.length) {
+      var ir = tokensToIrConstraint(tokens);
+      var constraint = irConstraintToKiwi(identifiers, ir);
 
-		const tokens = [ ];
+      if (constraint) {
+        constraintMap[constraintString.trim()] = constraint;
+        solver.addConstraint(constraint);
+      }
+    }
+  };
 
-		let nextToken;
-		while (nextToken = l.token())
-			tokens.push(nextToken);
+  var getValues = function getValues() {
+    var result = {};
 
-		//console.log('tokens:', JSON.stringify(tokens))
+    for (var variableName in identifiers) {
+      result[variableName] = identifiers[variableName].value();
+    }
 
-		if (tokens.length) {
-			const ir = tokensToIrConstraint(tokens);
-			const constraint = irConstraintToKiwi(identifiers, ir);
-			if (constraint) {
-				constraintMap[constraintString.trim()] = constraint;
-				solver.addConstraint(constraint);
-			}
-		}
-	};
+    return result;
+  };
 
+  var removeConstraint = function removeConstraint(constraintString) {
+    if (constraintMap[constraintString.trim()]) {
+      solver.removeConstraint(constraintMap[constraintString]);
+      delete constraintMap[constraintString];
+    }
+  };
 
-	const getValues = function () {
-		const result = { };
-		for (const variableName in identifiers)
-			result[variableName] = identifiers[variableName].value();
-		return result
-	};
+  var suggestValue = function suggestValue(variableName, value) {
+    var v = identifiers[variableName];
+    if (v) solver.suggestValue(v, value);
+  };
 
+  var solver = new kiwi.Solver();
 
-	const removeConstraint = function (constraintString) {
-		if (constraintMap[constraintString.trim()]) {
-			solver.removeConstraint(constraintMap[constraintString]);
-			delete constraintMap[constraintString];
-		}
-	};
+  var updateVariables = function updateVariables() {
+    solver.updateVariables();
+  };
 
+  var constraintMap = {}; // map constraint strings to the instances
 
-	const suggestValue = function (variableName, value) {
-		const v = identifiers[variableName];
-		if (v)
-			solver.suggestValue(v, value);
-	};
+  var identifiers = {}; // map variable names to their instances
 
-
-	const solver = new kiwi.Solver();
-
-
-	const updateVariables = function () {
-		solver.updateVariables();
-	};
-
-	const constraintMap = { }; // map constraint strings to the instances
-	const identifiers = { };  // map variable names to their instances
-
-	editableVariables.forEach(function (editVariable) {
-		if (!identifiers[editVariable.name]) {
-			const v = new kiwi.Variable(editVariable.name );
-			identifiers[editVariable.name] = v;
-			solver.addEditVariable(v, strengthLookup(editVariable.strength));
-		}
-	});
-
-	constraintString.split('\n').forEach(addConstraint);
-
-	return { addConstraint, getValues, removeConstraint, suggestValue, updateVariables }
+  editableVariables.forEach(function (editVariable) {
+    if (!identifiers[editVariable.name]) {
+      var v = new kiwi.Variable(editVariable.name);
+      identifiers[editVariable.name] = v;
+      solver.addEditVariable(v, strengthLookup(editVariable.strength));
+    }
+  });
+  constraintString.split('\n').forEach(addConstraint);
+  return {
+    addConstraint: addConstraint,
+    getValues: getValues,
+    removeConstraint: removeConstraint,
+    suggestValue: suggestValue,
+    updateVariables: updateVariables
+  };
 }
 
 module.exports = constraints;
