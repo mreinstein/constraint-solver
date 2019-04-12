@@ -4,7 +4,7 @@
 
 a cassowary constraint solver. wraps [kiwi.js](https://www.npmjs.com/package/kiwi.js) with better ergonomics.
 
-Declares a mini language to declare constraints in text rather than code.
+Declares a mini language to declare constraints in text rather than code using pegjs.
 
 ## example
 
@@ -12,34 +12,25 @@ Declares a mini language to declare constraints in text rather than code.
 import constraints from 'constraint-solver'
 
 
-const layout = constraints({
-	editableVariables: [
-		{
-			name: 'window.width', 
-			strength: 'strong'
-		},
-		{
-			name: 'window.height', 
-			strength: 'strong'
-		}
-	],
-	constraints: `
-		modal.width  <= window.width * 0.95   required
-		modal.height <= window.height * 0.95  required
-		
-		modal.left   == (window.width - modal.width) / 2   required
-		modal.top    == (window.height - modal.height) / 2 required
+const layout = constraints(`
+	editable window.width strong
+	editable window.height
 
-		playlist.width  == modal.width / 3
-		playlist.height <= videoContainer.height  required
-		playlist.top    == modal.top              required
-		playlist.left   == modal.left + videoContainer.width
+	modal.width  <= window.width * 0.95   required
+	modal.height <= window.height * 0.95  required
+	
+	modal.left   == (window.width - modal.width) / 2   required
+	modal.top    == (window.height - modal.height) / 2 required
 
-		videoContainer.width  == modal.width * 0.66
-		videoContainer.height == modal.height
-		videoContainer.top    == modal.top            required
-	`
-})
+	playlist.width  == modal.width / 3
+	playlist.height <= videoContainer.height  required
+	playlist.top    == modal.top              required
+	playlist.left   == modal.left + videoContainer.width
+
+	videoContainer.width  == modal.width * 0.66
+	videoContainer.height == modal.height
+	videoContainer.top    == modal.top            required
+`)
 
 layout.suggestValue('window.width', 1024)
 layout.suggestValue('window.height', 768)
@@ -58,38 +49,12 @@ console.log(layout.getValues())
 ```
 
 
-### dynamic constraints
-
-You don't need to declare all of the constraints up front. It's possible to dynamically add/remove constraints from the 
-solver at any time:
-
-```javascript
-const layout = constraints({
-	editableVariables: [ ],
-	constraints: 'y == 34'
-})
-
-// .. later on
-
-layout.addConstraint('x == y + 45')
-layout.addConstraint('z == x * 14.5')
-
-// NOTE: this must match the same exact string used when the constraint was added
-layout.removeConstraint('y == 34')
-
-layout.updateVariables()
-
-console.log(layout.getValues())
-
-```
-
-
 ### how it works
 
 ```
 ┌-----------------┐                       ┌----------------------------┐        ┌-----------┐
 |input constraints|        ┌-----┐        |intermediate representation |        |ir to kiwi |
-|(raw text)       | -----> |Lexer| -----> |(ir) compiler               | -----> |compiler   |
+|(raw text)       | -----> |pegjs| -----> |    (ir, in json)           | -----> |solver     |
 └-----------------┘        └-----┘        └----------------------------┘        └-----------┘
                                              (accepts tokens as input)
 

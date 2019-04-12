@@ -6,7 +6,9 @@ start
 
 Statement
   = expression:LinearExpression WhiteSpace strength:Strength EOS { expression.strength = strength; return expression; }
-  / expression:LinearExpression EOS { console.log('bleep:', expression); return expression; }
+  / expression:LinearExpression EOS { return expression; }
+  / Editable __ name:Identifier __ strength:Strength EOS { return { type: "EditableVariable", name: name, strength: strength }; }
+  / Editable __ name:Identifier EOS { return { type: "EditableVariable", name: name, strength: "strong" }; }
 
 SourceCharacter
   = .
@@ -165,6 +167,9 @@ InequalityOperator
   / ">="
   / "<"
   / ">"
+
+Editable
+  = "EDITABLE"i
 
 Strength
   = "REQUIRED"i
