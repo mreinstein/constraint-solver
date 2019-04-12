@@ -4,7 +4,7 @@
 
 a cassowary constraint solver. wraps [kiwi.js](https://www.npmjs.com/package/kiwi.js) with better ergonomics.
 
-Declares a mini language to declare constraints in text rather than code using pegjs.
+Declares a mini language to declare constraints in text rather than code.
 
 ## example
 
@@ -50,6 +50,10 @@ console.log(layout.getValues())
 
 
 ### how it works
+
+The language is defined in a pegjs grammar, which generates a parser javascript module. That module is 
+capable of taking a string of source code as input, and produces json containing all the parsed tokens.
+These tokens are turned into kiwi.js constraints and variables.
 
 ```
 ┌-----------------┐                       ┌----------------------------┐        ┌-----------┐
