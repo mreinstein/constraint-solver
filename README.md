@@ -37,7 +37,7 @@ layout.suggestValue('window.height', 768)
 
 layout.updateVariables()
 
-console.log(layout.getValues())
+console.log(layout.getValues({ roundToInt: true }))
 
 /*
 {
