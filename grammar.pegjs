@@ -5,16 +5,20 @@ start
   = __ statements:(Statement*) __ { return statements; }
 
 Statement
-  = expression:LinearExpression WhiteSpace strength:Strength EOS { expression.strength = strength; return expression; }
-  / expression:LinearExpression EOS { return expression; }
-  / Editable __ name:Identifier __ strength:Strength EOS { return { type: "EditableVariable", name: name, strength: strength }; }
-  / Editable __ name:Identifier EOS { return { type: "EditableVariable", name: name, strength: "strong" }; }
+  = __ expression:LinearExpression (WhiteSpace+ strength:Strength)? WhiteSpace* EOS {
+      const s = (typeof strength !== 'undefined') ? s : 'STRONG';
+      expression.strength = s; return expression;
+    }
+  / __ Editable WhiteSpace+ name:Identifier (WhiteSpace+ strength:Strength)? WhiteSpace* EOS {
+      const s = (typeof strength !== 'undefined') ? s : 'STRONG';
+      return { type: "EditableVariable", name: name, strength: s };
+    }
 
 SourceCharacter
   = .
 
 IdentifierStart
-  = [a-zA-Z]
+  = [a-zA-Z.]
   / "$"
   / "_"
 

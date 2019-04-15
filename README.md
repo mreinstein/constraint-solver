@@ -41,9 +41,19 @@ console.log(layout.getValues())
 
 /*
 {
-  window.width: 1024, window.height: 768, modal.width: 972, modal.height: 729, modal.left: 25, modal.top: 19
-  modal.width: 972, playlist.height: 729, playlist.left: 667, playlist.top: 19, playlist.width: 324
-  videoContainer.height: 729, videoContainer.top: 19, videoContainer.width: 642
+  window.width: 1024,
+  window.height: 768,
+  modal.width: 972,
+  modal.height: 729,
+  modal.left: 25,
+  modal.top: 19
+  playlist.height: 729,
+  playlist.left: 667,
+  playlist.top: 19,
+  playlist.width: 324
+  videoContainer.height: 729,
+  videoContainer.top: 19,
+  videoContainer.width: 642
 }
 */
 ```
