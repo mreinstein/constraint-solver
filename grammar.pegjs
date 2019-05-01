@@ -5,12 +5,13 @@ start
   = __ statements:(Statement*) __ { return statements; }
 
 Statement
-  = __ expression:LinearExpression (WhiteSpace+ strength:Strength)? WhiteSpace* EOS {
-      const s = (typeof strength !== 'undefined') ? s : 'STRONG';
+  = __ expression:LinearExpression WhiteSpace* strength:Strength* WhiteSpace* EOS {
+      const s = (strength.length) ? strength[0].toUpperCase() : 'STRONG';
       expression.strength = s; return expression;
-    }
+     }
+  
   / __ Editable WhiteSpace+ name:Identifier (WhiteSpace+ strength:Strength)? WhiteSpace* EOS {
-      const s = (typeof strength !== 'undefined') ? s : 'STRONG';
+      const s = (typeof strength !== 'undefined') ? strength.toUpperCase() : 'STRONG';
       return { type: "EditableVariable", name: name, strength: s };
     }
 
@@ -176,10 +177,7 @@ Editable
   = "EDITABLE"i
 
 Strength
-  = "REQUIRED"i
-  / "STRONG"i
-  / "MEDIUM"i
-  / "WEAK"i
+  = "REQUIRED"i / "STRONG"i / "MEDIUM"i / "WEAK"i
 
 LinearExpression
   = head:InequalityExpression
