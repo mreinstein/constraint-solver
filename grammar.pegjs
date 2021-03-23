@@ -81,8 +81,8 @@ Integer
   }
 
 Real
-  = digits:(Integer "." Integer) {
-    return parseFloat(digits.join(""));
+  = digits:(Integer ".") subs:[0-9]+ {
+    return parseFloat(digits.join("") + subs.join(""));
   }
 
 SignedInteger

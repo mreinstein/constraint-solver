@@ -20,7 +20,8 @@ const layout = constraints(`
 	videoContainer.width  == modal.width * 0.66
 	videoContainer.height == modal.height
 	videoContainer.top    == modal.top            required
-   
+
+  floating.top == 1.005 * window.width   
 `)
 
 
@@ -42,7 +43,8 @@ tap.same(layout.getValues(), {
   'playlist.top': 19.200000000000017,
   'playlist.left': 667.648,
   'videoContainer.width': 642.048,
-  'videoContainer.top': 19.200000000000017
+  'videoContainer.top': 19.200000000000017,
+  'floating.top': 1029.12
 })
 
 tap.same(layout.getValues({ roundToInt: true }), {
@@ -58,6 +60,7 @@ tap.same(layout.getValues({ roundToInt: true }), {
   'playlist.top': 19,
   'playlist.left': 668,
   'videoContainer.width': 642,
-  'videoContainer.top': 19
+  'videoContainer.top': 19,
+  'floating.top': 1029
 })
 
