@@ -2,15 +2,14 @@
   "name": "constraint-solver",
   "version": "3.0.2",
   "description": "a constraint solver based on kiwi.js (cassowary)",
-  "main": "dist/constraint-solver.cjs.js",
-  "module": "dist/constraint-solver.esm.js",
+  "main": "lib/constraints.js",
+  "type": "module",
   "scripts": {
-    "build": "npm-run-all -p build:*",
-    "build-grammar": "pegjs -o lib/grammar.js --optimize size grammar.pegjs",
-    "build:cjs": "rollup lib/constraints.js -c rollup.config.js --file dist/constraint-solver.cjs.js --format cjs",
-    "build:esm": "rollup lib/constraints.js -c rollup.config.js --file dist/constraint-solver.esm.js --format esm",
-    "prepublishOnly": "npm-run-all -s build-grammar build",
-    "test": "tap test/*.js"
+    "build": "npm-run-all -s build:grammar build:to-esm",
+    "build:grammar": "pegjs -o lib/grammar.js --optimize size grammar.pegjs",
+    "build:to-esm": "node grammar-to-esm.js",
+    "prepublishOnly": "npm run build",
+    "test": "tap --no-esm test/*.js"
   },
   "repository": {
     "type": "git",
@@ -26,16 +25,9 @@
     "kiwi.js": "^1.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
-    "esm": "^3.2.22",
     "npm-run-all": "^4.1.5",
     "pegjs": "^0.10.0",
-    "rollup": "^1.2.2",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.3.4",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "tap": "^13.0.0"
+    "tap": "^14.11.0"
   },
   "keywords": [
     "cassowary",
@@ -43,5 +35,8 @@
     "constraint solver",
     "layout",
     "autolayout"
-  ]
+  ],
+  "engines": {
+    "node": ">=12.17"
+  }
 }

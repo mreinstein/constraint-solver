@@ -6,7 +6,10 @@ a cassowary constraint solver. wraps [kiwi.js](https://www.npmjs.com/package/kiw
 
 Declares a mini language to declare constraints in text rather than code.
 
-## example
+Requires node >= v12.17 or a browser that supports es modules.
+
+
+## usage
 
 ```javascript
 import constraints from 'constraint-solver'
