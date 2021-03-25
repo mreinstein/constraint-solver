@@ -1,6 +1,6 @@
 {
   "name": "constraint-solver",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "a constraint solver based on kiwi.js (cassowary)",
   "main": "lib/constraints.js",
   "type": "module",
