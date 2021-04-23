@@ -5,9 +5,7 @@
   "main": "lib/constraints.js",
   "type": "module",
   "scripts": {
-    "build": "npm-run-all -s build:grammar build:to-esm",
-    "build:grammar": "pegjs -o lib/grammar.js --optimize size grammar.pegjs",
-    "build:to-esm": "node grammar-to-esm.js",
+    "build": "peggy --format es -o lib/grammar.js --optimize size grammar.pegjs",
     "prepublishOnly": "npm run build",
     "test": "tap test/*.js"
   },
@@ -22,12 +20,11 @@
   },
   "homepage": "https://github.com/mreinstein/constraint-solver#readme",
   "dependencies": {
-    "kiwi.js": "^1.1.1"
+    "kiwi.js": "^1.1.1",
+    "peggy": "^1.1.0"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "pegjs": "^0.10.0",
-    "tap": "^15.0.0"
+    "tap": "^15.0.4"
   },
   "keywords": [
     "cassowary",
