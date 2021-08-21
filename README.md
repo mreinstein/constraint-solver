@@ -69,10 +69,9 @@ capable of taking a string of source code as input, and produces json containing
 These tokens are turned into kiwi.js constraints and variables.
 
 ```
-┌-----------------┐                       ┌----------------------------┐        ┌-----------┐
-|input constraints|        ┌-----┐        |intermediate representation |        |ir to kiwi |
-|(raw text)       | -----> |pegjs| -----> |    (ir, in json)           | -----> |solver     |
-└-----------------┘        └-----┘        └----------------------------┘        └-----------┘
-                                             (accepts tokens as input)
-
+┌─────────────────┐             ┌────────────────────────────┐  ┌───────────┐
+│input constraints│  ┌───────┐  │intermediate representation │  │IR to kiwi │
+│(raw text)       ├─▶│ peggy ├─▶│    (IR, in JSON)           ├─▶│solver     │
+└─────────────────┘  └───────┘  └────────────────────────────┘  └───────────┘
+                                  (accepts tokens as input)
 ```
