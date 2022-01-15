@@ -1,6 +1,7 @@
 # constraint-solver
 
-[![Build Status](https://travis-ci.org/mreinstein/constraint-solver.svg?branch=master)](https://travis-ci.org/mreinstein/constraint-solver)
+![tests](https://github.com/mreinstein/constraint-solver/actions/workflows/main.yml/badge.svg)
+
 
 a cassowary constraint solver. wraps [kiwi.js](https://www.npmjs.com/package/kiwi.js) with better ergonomics.
 
